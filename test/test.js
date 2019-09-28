@@ -34,6 +34,18 @@ describe(`${pkg.name} - ${pkg.description}`, () => {
 		timetracking.list(new Date());
 	});
 
+	it(':: list tasks from a begin date until now', () => {
+		timetracking.list(new Date(), {begin: new Date() -1});
+	});
+
+	it(':: list tasks from now until an end date', () => {
+		timetracking.list(new Date(), {end: new Date() + 1});
+	});
+
+	it(':: list tasks within an interval', () => {
+		timetracking.list({begin: new Date() - 1, end: new Date + 1});
+	});
+
 	it(':: pause task', () => {
 		let date = new Date();
 		let formattedDate = `${date.getHours()}:${date.getMinutes().toString().length == 1 ? '0' + date.getMinutes(): date.getMinutes()}`;

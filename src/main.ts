@@ -69,7 +69,14 @@ program
 	.command('list [date]')
 	.description('Resume time of the taks. You can pass the date on format configured (' + (config && config.all.config ? config.all.config.date_format : 'MM/dd/yyyy') + ').')
 	.alias('l')
-	.action((date) => {
+	.option('-b, --begin <date>', 'The date to list tasks from.')
+	.option('-e, --end <date>', 'The date to list tasks until.')
+	.action((date, options) => {
+		if (!date || date == "") {
+			if (options.begin || options.end) {
+				timetracking.list(options);
+			}
+		}
 		timetracking.list(date);
 	});
 

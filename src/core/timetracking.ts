@@ -108,7 +108,7 @@ export class Timetracking {
 		}
 	}
 
-	public list(date: string): void {
+	public list(date?: string, interval?: {begin?: string, end?: string}): void {
 		if (!this.tasks || this.tasks.length === 0) {
 			console.log('There are no tasks added yet.');
 			return;
@@ -128,9 +128,27 @@ export class Timetracking {
 		let hours;
 		let min;
 		this.tasks.forEach((t) => {
-			let times = _.filter(t.log, (l) => {
-				return moment(l.start).format(dateFormat) === moment(date, dateFormat).format(dateFormat);
-			});
+			let beginHalf: any[] = [];
+			let endHalf: any[] = [];
+			let specificTimes: any[] = [];
+			if (interval) {
+				if (interval.begin) {
+					beginHalf = _.filter(t.log, (l) => {
+						return moment(l.start).format(dateFormat) >= moment(interval.begin, dateFormat).format(dateFormat);
+					});
+				}
+				if (interval.end) {
+					endHalf = _.filter(t.log, (l) => {
+						return moment(l.start).format(dateFormat) <= moment(interval.begin, dateFormat).format(dateFormat);
+					});
+				}
+			}
+			if (date) {
+				specificTimes = _.filter(t.log, (l) => {
+					return moment(l.start).format(dateFormat) === moment(date, dateFormat).format(dateFormat);
+				});
+			}
+			let times = _.union(beginHalf, specificTimes, endHalf);;
 			if (times && times.length > 0) {
 				let beginTask = moment();
 				let diffTask = moment();
